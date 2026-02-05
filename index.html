@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Gestión de Proyectos E-commerce</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #004E89;
+            --accent: #F7B801;
+            --dark: #1A1A2E;
+            --light: #F4F4F9;
+            --success: #06D6A0;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', serif;
+            background: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 78, 137, 0.2) 0%, transparent 50%),
+                var(--dark);
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(45deg, rgba(255,255,255,0.02) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255,255,255,0.02) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.02) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.02) 75%);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: clamp(3rem, 10vw, 7rem);
+            text-align: center;
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: titleFade 1.5s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes titleFade {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--light);
+            text-align: center;
+            max-width: 800px;
+            opacity: 0.9;
+            animation: subtitleFade 1.5s ease-out 0.3s both;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 3rem;
+        }
+
+        @keyframes subtitleFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 0.9;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            z-index: 1;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        .scroll-indicator svg {
+            width: 30px;
+            height: 30px;
+            stroke: var(--primary);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: sticky;
+            top: 0;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.5rem;
+            color: var(--primary);
+            letter-spacing: 0.1em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: sectionFade 0.8s ease-out forwards;
+        }
+
+        @keyframes sectionFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: var(--primary);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(0, 78, 137, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .card-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .card-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--light);
+            opacity: 0.9;
+        }
+
+        .card-content ul {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .card-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Accordion */
+        .accordion {
+            margin-top: 3rem;
+        }
+
+        .accordion-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-item:hover {
+            border-color: var(--primary);
+        }
+
+        .accordion-header {
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 107, 53, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .accordion-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.5rem;
+            color: var(--primary);
+            letter-spacing: 0.05em;
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 2000px;
+        }
+
+        .accordion-body {
+            padding: 2rem;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            margin-top: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 4px solid var(--dark);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .timeline-number {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+            top: -1rem;
+            right: 1rem;
+        }
+
+        .timeline-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Interactive Matrix */
+        .matrix-container {
+            margin-top: 3rem;
+            overflow-x: auto;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .matrix-table th {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 1rem;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.2rem;
+            letter-spacing: 0.05em;
+            text-align: left;
+        }
+
+        .matrix-table td {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .matrix-table tr:hover td {
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .matrix-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(247, 184, 1, 0.2);
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+
+        /* Checklist */
+        .checklist {
+            margin-top: 2rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checklist-item:hover {
+            background: rgba(255, 107, 53, 0.1);
+            transform: translateX(5px);
+        }
+
+        .checklist-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+
+        .checklist-item.checked .checklist-checkbox {
+            background: var(--primary);
+            position: relative;
+        }
+
+        .checklist-item.checked .checklist-checkbox::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--dark);
+            font-weight: bold;
+        }
+
+        .checklist-item.checked .checklist-text {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 9999;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Call to Action */
+        .cta-box {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(247, 184, 1, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 3rem;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: var(--primary);
+            color: var(--dark);
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.3rem;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid var(--primary);
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Code Block */
+        .code-block {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'FÓRMULA';
+            position: absolute;
+            top: -1px;
+            right: 1rem;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+        }
+
+        .code-line {
+            color: var(--success);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 2px solid var(--primary);
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                padding-left: 50px;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .nav {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 2px dotted var(--accent);
+            cursor: help;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            background: var(--dark);
+            color: var(--light);
+            text-align: center;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 2px solid var(--primary);
+            font-size: 0.9rem;
+            min-width: 200px;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: rgba(247, 184, 1, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .highlight-box strong {
+            color: var(--accent);
+        }
+
+        /* Tab System */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: none;
+            color: var(--light);
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.2rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Counter */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .stat-number {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3rem;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--light);
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="hero-title">Guía Interactiva<br>Gestión de Proyectos</h1>
+        <p class="hero-subtitle">Material de apoyo para completar el Entregable 1 del Proyecto Final<br>Tecnicatura en Comercio Electrónico y Marketing Digital</p>
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav">
+            <div class="nav-logo">PF-GUIDE 2026</div>
+            <ul class="nav-links">
+                <li><a href="#agencia">Agencia</a></li>
+                <li><a href="#diagnostico">Diagnóstico</a></li>
+                <li><a href="#benchmark">Benchmark</a></li>
+                <li><a href="#mercado">Mercado</a></li>
+                <li><a href="#economia">Economía</a></li>
+                <li><a href="#recursos">Recursos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Sección 1: Perfil de Agencia -->
+        <section id="agencia" class="section">
+            <h2 class="section-title">01. Perfil de la Agencia</h2>
+            <p class="section-subtitle">Definiendo tu identidad y estructura organizacional</p>
+
+            <div class="highlight-box">
+                <strong>¿Por qué es importante?</strong> El perfil de agencia establece tu identidad como equipo ejecutor del proyecto. Define quiénes son, qué hacen y cómo lo hacen. Es la base sobre la cual construirán todo el proyecto de e-commerce.
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('tab-mision')">Misión & Visión</button>
+                <button class="tab" onclick="showTab('tab-roles')">Roles del Equipo</button>
+                <button class="tab" onclick="showTab('tab-raci')">Matriz RACI</button>
+            </div>
+
+            <div id="tab-mision" class="tab-content active">
+                <div class="cards-grid">
+                    <div class="card">
+                        <span class="card-icon">🎯</span>
+                        <h3 class="card-title">Misión</h3>
+                        <div class="card-content">
+                            <p><strong>Definición:</strong> La razón de ser de tu agencia. ¿Qué problema resuelven para sus clientes?</p>
+                            <p><strong>Ejemplo:</strong> "Transformar PyMEs tradicionales en empresas digitalmente competitivas mediante soluciones de e-commerce escalables y rentables."</p>
+                            <p><strong>Elementos clave:</strong></p>
+                            <ul>
+                                <li>¿A quién sirven? (PyMEs, retail, B2B, etc.)</li>
+                                <li>¿Qué ofrecen? (Estrategia, desarrollo, marketing)</li>
+                                <li>¿Cómo generan valor? (Metodología, enfoque, diferenciador)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <span class="card-icon">🚀</span>
+                        <h3 class="card-title">Visión</h3>
+                        <div class="card-content">
+                            <p><strong>Definición:</strong> El futuro aspiracional de tu agencia. ¿Dónde quieren estar en 3-5 años?</p>
+                            <p><strong>Ejemplo:</strong> "Ser la agencia referente en implementación de e-commerce para PyMEs del sector retail en Argentina, reconocida por resultados medibles y ROI comprobado."</p>
+                            <p><strong>Elementos clave:</strong></p>
+                            <ul>
+                                <li>Posicionamiento deseado</li>
+                                <li>Alcance geográfico o sectorial</li>
+                                <li>Reconocimiento o impacto esperado</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <span class="card-icon">💎</span>
+                        <h3 class="card-title">Propuesta de Valor</h3>
+                        <div class="card-content">
+                            <p><strong>Definición:</strong> El beneficio único que solo tu agencia puede ofrecer.</p>
+                            <p><strong>Ejemplos por rubro:</strong></p>
+                            <ul>
+                                <li><strong>Retail:</strong> "Omnicanalidad desde día 1"</li>
+                                <li><strong>B2B:</strong> "Integraciones ERP nativas"</li>
+                                <li><strong>SaaS:</strong> "Growth automatizado con IA"</li>
+                                <li><strong>DNVB:</strong> "Branding + Performance integrado"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-roles" class="tab-content">
+                <p style="margin-bottom: 2rem;">Cada proyecto de e-commerce requiere un equipo multidisciplinario. A continuación, los roles esenciales y sus responsabilidades:</p>
+
+                <div class="matrix-container">
+                    <table class="matrix-table">
+                        <thead>
+                            <tr>
+                                <th>Rol</th>
+                                <th>Responsabilidades Clave</th>
+                                <th>Entregables</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="role-badge">PM</span> Project Manager</td>
+                                <td>Planificación, coordinación, control de alcance/tiempo/costo, gestión de riesgos</td>
+                                <td>Cronograma, reportes de avance, actas, plan del proyecto</td>
+                            </tr>
+                            <tr>
+                                <td><span class="role-badge">GROWTH</span> Estratega Digital</td>
+                                <td>Definición de objetivos, KPIs, funnel, plan de medición, propuesta de valor</td>
+                                <td>Brief estratégico, plan de medios, dashboard de KPIs</td>
+                            </tr>
+                            <tr>
+                                <td><span class="role-badge">UX/UI</span> Diseñador UX/UI</td>
+                                <td>Arquitectura de información, prototipos, pruebas de usabilidad, accesibilidad</td>
+                                <td>Wireframes, prototipos, UI kit, resultados de testing</td>
+                            </tr>
+                            <tr>
+                                <td><span class="role-badge">DEV</span> Desarrollador</td>
+                                <td>Implementación técnica, integraciones (pagos, logística, analítica), QA</td>
+                                <td>Código, configuración, ambientes, evidencias de QA</td>
+                            </tr>
+                            <tr>
+                                <td><span class="role-badge">DATA</span> Analista de Datos</td>
+                                <td>Plan de medición, configuración de analítica, dashboards, insights</td>
+                                <td>Eventos configurados, dashboards, reportes de análisis</td>
+                            </tr>
+                            <tr>
+                                <td><span class="role-badge">CS</span> Customer Success</td>
+                                <td>Relación con cliente, gestión de expectativas, aceptación de entregables</td>
+                                <td>Minutas, acuerdos, calendario de hitos</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="highlight-box" style="margin-top: 2rem;">
+                    <strong>💡 Consejo:</strong> En equipos pequeños, una persona puede tener múltiples roles. Lo importante es documentar claramente quién es responsable de qué para evitar solapamientos y confusiones.
+                </div>
+            </div>
+
+            <div id="tab-raci" class="tab-content">
+                <p style="margin-bottom: 2rem;">La matriz RACI es una herramienta que clarifica responsabilidades asignando cuatro tipos de participación para cada actividad:</p>
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <span class="card-icon">✅</span>
+                        <h3 class="card-title">R - Responsible</h3>
+                        <div class="card-content">
+                            <p><strong>Responsable de ejecutar:</strong> Quien hace el trabajo.</p>
+                            <p>Puede haber varios responsables por tarea.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <span class="card-icon">👤</span>
+                        <h3 class="card-title">A - Accountable</h3>
+                        <div class="card-content">
+                            <p><strong>Responsable final:</strong> Quien aprueba y rinde cuentas.</p>
+                            <p>Solo puede haber UNO por tarea.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <span class="card-icon">💬</span>
+                        <h3 class="card-title">C - Consulted</h3>
+                        <div class="card-content">
+                            <p><strong>Consultado:</strong> A quien se pide opinión antes de decidir.</p>
+                            <p>Comunicación bidireccional.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <span class="card-icon">📢</span>
+                        <h3 class="card-title">I - Informed</h3>
+                        <div class="card-content">
+                            <p><strong>Informado:</strong> A quien se notifica después de decidir.</p>
+                            <p>Comunicación unidireccional.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--accent); margin: 3rem 0 1.5rem;">Ejemplo de Matriz RACI</h3>
+                
+                <div class="matrix-container">
+                    <table class="matrix-table">
+                        <thead>
+                            <tr>
+                                <th>Actividad</th>
+                                <th>PM</th>
+                                <th>UX/UI</th>
+                                <th>Dev</th>
+                                <th>Cliente</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Definir alcance y criterios de aceptación</td>
+                                <td><strong style="color: var(--accent);">A</strong></td>
+                                <td><strong style="color: var(--success);">C</strong></td>
+                                <td><strong style="color: var(--success);">C</strong></td>
+                                <td><strong style="color: var(--primary);">R</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Diseño de interfaz / prototipos</td>
+                                <td><strong style="color: var(--success);">C</strong></td>
+                                <td><strong style="color: var(--accent);">R/A</strong></td>
+                                <td><strong style="color: var(--success);">C</strong></td>
+                                <td>I</td>
+                            </tr>
+                            <tr>
+                                <td>Integración de pagos</td>
+                                <td><strong style="color: var(--success);">C</strong></td>
+                                <td>I</td>
+                                <td><strong style="color: var(--accent);">R/A</strong></td>
+                                <td><strong style="color: var(--success);">C</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Aprobación de contenidos</td>
+                                <td>I</td>
+                                <td><strong style="color: var(--success);">C</strong></td>
+                                <td>I</td>
+                                <td><strong style="color: var(--accent);">R/A</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 2: Diagnóstico del Negocio -->
+        <section id="diagnostico" class="section">
+            <h2 class="section-title">02. Diagnóstico del Negocio</h2>
+            <p class="section-subtitle">Análisis FODA y comprensión del cliente</p>
+
+            <div class="highlight-box">
+                <strong>Objetivo:</strong> Comprender la situación actual del negocio para identificar puntos críticos y áreas de oportunidad. El análisis FODA es la herramienta fundamental para este diagnóstico.
+            </div>
+
+            <h3 style="font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--accent); margin: 3rem 0 1.5rem;">Análisis FODA: Metodología</h3>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="card-icon">💪</span>
+                    <h3 class="card-title">Fortalezas (Internas)</h3>
+                    <div class="card-content">
+                        <p><strong>Ventajas internas del negocio:</strong></p>
+                        <p><strong>Preguntas guía:</strong></p>
+                        <ul>
+                            <li>¿Qué hace bien el negocio actualmente?</li>
+                            <li>¿Qué recursos únicos tiene? (capital, equipo, know-how)</li>
+                            <li>¿Qué reconocimiento tiene en el mercado?</li>
+                            <li>¿Tiene una base de clientes fiel?</li>
+                        </ul>
+                        <p><strong>Ejemplos:</strong></p>
+                        <ul>
+                            <li>Marca reconocida en el sector</li>
+                            <li>Equipo con experiencia técnica</li>
+                            <li>Infraestructura logística propia</li>
+                            <li>Cartera de productos diferenciada</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">⚡</span>
+                    <h3 class="card-title">Oportunidades (Externas)</h3>
+                    <div class="card-content">
+                        <p><strong>Factores externos favorables:</strong></p>
+                        <p><strong>Preguntas guía:</strong></p>
+                        <ul>
+                            <li>¿Qué tendencias del mercado favorecen al negocio?</li>
+                            <li>¿Existen nichos desatendidos?</li>
+                            <li>¿Hay cambios regulatorios favorables?</li>
+                            <li>¿Crece la demanda online en el sector?</li>
+                        </ul>
+                        <p><strong>Ejemplos:</strong></p>
+                        <ul>
+                            <li>Crecimiento del e-commerce en Argentina (30% anual)</li>
+                            <li>Baja competencia digital en el nicho</li>
+                            <li>Nuevas formas de pago disponibles</li>
+                            <li>Cambio de hábitos post-pandemia</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">⚠️</span>
+                    <h3 class="card-title">Debilidades (Internas)</h3>
+                    <div class="card-content">
+                        <p><strong>Limitaciones internas del negocio:</strong></p>
+                        <p><strong>Preguntas guía:</strong></p>
+                        <ul>
+                            <li>¿Qué áreas necesitan mejora urgente?</li>
+                            <li>¿Qué recursos faltan? (capital, equipo, tecnología)</li>
+                            <li>¿Dónde están los cuellos de botella operativos?</li>
+                            <li>¿Qué procesos son ineficientes?</li>
+                        </ul>
+                        <p><strong>Ejemplos:</strong></p>
+                        <ul>
+                            <li>Sin experiencia en ventas online</li>
+                            <li>Procesos logísticos manuales</li>
+                            <li>Presupuesto limitado para marketing</li>
+                            <li>Catálogo sin fotografía profesional</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🚨</span>
+                    <h3 class="card-title">Amenazas (Externas)</h3>
+                    <div class="card-content">
+                        <p><strong>Factores externos desfavorables:</strong></p>
+                        <p><strong>Preguntas guía:</strong></p>
+                        <ul>
+                            <li>¿Qué hace la competencia que nosotros no?</li>
+                            <li>¿Existen riesgos económicos o regulatorios?</li>
+                            <li>¿Hay cambios tecnológicos que nos afecten?</li>
+                            <li>¿Cambian las preferencias de los consumidores?</li>
+                        </ul>
+                        <p><strong>Ejemplos:</strong></p>
+                        <ul>
+                            <li>Competidores con e-commerce maduro</li>
+                            <li>Marketplace gigantes (Mercado Libre, Amazon)</li>
+                            <li>Inflación que reduce poder adquisitivo</li>
+                            <li>Aumento de costos logísticos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-box" style="margin-top: 3rem;">
+                <h3 class="cta-title">⚡ Tip Estratégico</h3>
+                <p class="cta-text">Del análisis FODA deben surgir estrategias concretas: <br>
+                <strong>FO:</strong> Usar fortalezas para aprovechar oportunidades | 
+                <strong>DO:</strong> Superar debilidades para capturar oportunidades<br>
+                <strong>FA:</strong> Usar fortalezas para mitigar amenazas | 
+                <strong>DA:</strong> Minimizar debilidades y evitar amenazas</p>
+            </div>
+        </section>
+
+        <!-- Sección 3: Benchmark -->
+        <section id="benchmark" class="section">
+            <h2 class="section-title">03. Benchmark de Competencia</h2>
+            <p class="section-subtitle">Análisis comparativo de e-commerce competidores</p>
+
+            <div class="highlight-box">
+                <strong>¿Qué es el Benchmark?</strong> Es el proceso de identificar, analizar y aprender de las mejores prácticas de competidores directos en el canal online. No se trata de copiar, sino de entender qué funciona y qué puede mejorarse.
+            </div>
+
+            <h3 style="font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--accent); margin: 3rem 0 1.5rem;">Criterios de Análisis</h3>
+
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">1. Plataforma Tecnológica</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>¿Qué analizar?</strong></p>
+                            <ul>
+                                <li><strong>Sistema usado:</strong> Shopify, Tiendanube, VTEX, WooCommerce, desarrollo a medida</li>
+                                <li><strong>Cómo identificarlo:</strong> Usar herramientas como BuiltWith, Wappalyzer, o inspeccionar el código fuente</li>
+                                <li><strong>Por qué importa:</strong> Conocer la tecnología ayuda a entender limitaciones/ventajas y costos aproximados</li>
+                            </ul>
+                            <div class="highlight-box">
+                                <strong>Herramientas recomendadas:</strong><br>
+                                • BuiltWith.com - Detecta plataforma y tecnologías<br>
+                                • Wappalyzer (extensión Chrome) - Identifica stack tecnológico<br>
+                                • SimilarWeb - Tráfico y fuentes de adquisición
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">2. Experiencia de Usuario (UX)</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Aspectos a evaluar:</strong></p>
+                            <div class="checklist">
+                                <div class="checklist-item">
+                                    <div class="checklist-checkbox"></div>
+                                    <div class="checklist-text"><strong>Navegación:</strong> ¿Es intuitiva? ¿Tiene buscador? ¿Filtros efectivos?</div>
+                                </div>
+                                <div class="checklist-item">
+                                    <div class="checklist-checkbox"></div>
+                                    <div class="checklist-text"><strong>Velocidad:</strong> ¿Carga rápido? Usar PageSpeed Insights de Google</div>
+                                </div>
+                                <div class="checklist-item">
+                                    <div class="checklist-checkbox"></div>
+                                    <div class="checklist-text"><strong>Mobile:</strong> ¿Es responsive? ¿Experiencia mobile igual de buena?</div>
+                                </div>
+                                <div class="checklist-item">
+                                    <div class="checklist-checkbox"></div>
+                                    <div class="checklist-text"><strong>Ficha de producto:</strong> ¿Imágenes de calidad? ¿Zoom? ¿Descripciones completas?</div>
+                                </div>
+                                <div class="checklist-item">
+                                    <div class="checklist-checkbox"></div>
+                                    <div class="checklist-text"><strong>Trust signals:</strong> ¿Reviews? ¿Sellos de seguridad? ¿Políticas claras?</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">3. Estrategia de Checkout</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Elementos críticos del proceso de compra:</strong></p>
+                            <ul>
+                                <li><strong>Cantidad de pasos:</strong> ¿One-page, multi-step? Lo ideal: 3-4 pasos máximo</li>
+                                <li><strong>Registro obligatorio:</strong> ¿Pide crear cuenta o permite guest checkout?</li>
+                                <li><strong>Métodos de pago:</strong> ¿Tarjetas, transferencia, Mercado Pago, efectivo?</li>
+                                <li><strong>Opciones de envío:</strong> ¿Retiro en tienda, envío a domicilio, express?</li>
+                                <li><strong>Transparencia:</strong> ¿Muestra costos totales antes de finalizar?</li>
+                                <li><strong>Abandono:</strong> ¿Tiene recuperación de carrito abandonado?</li>
+                            </ul>
+                            <div class="code-block">
+                                <span class="code-line">MEJORES PRÁCTICAS:</span><br>
+                                <span class="code-line">✓ Guest checkout habilitado (aumenta conversión 30-40%)</span><br>
+                                <span class="code-line">✓ Progress bar mostrando pasos del proceso</span><br>
+                                <span class="code-line">✓ Autocompletado de direcciones</span><br>
+                                <span class="code-line">✓ Múltiples métodos de pago</span><br>
+                                <span class="code-line">✓ Costos de envío claros desde el inicio</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">4. Marketing y Adquisición</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Canales de adquisición a analizar:</strong></p>
+                            <ul>
+                                <li><strong>SEO:</strong> ¿Posiciona en Google? ¿Para qué keywords? (Usar Ubersuggest, SEMrush)</li>
+                                <li><strong>Paid Ads:</strong> ¿Corre anuncios en Google/Meta? ¿Qué tipo de creatividades?</li>
+                                <li><strong>Redes Sociales:</strong> ¿Activo en Instagram/Facebook/TikTok? ¿Frecuencia de publicación?</li>
+                                <li><strong>Email Marketing:</strong> ¿Ofrece newsletter? ¿Descuentos por suscripción?</li>
+                                <li><strong>Contenido:</strong> ¿Tiene blog? ¿Guías de producto?</li>
+                            </ul>
+                            <div class="highlight-box">
+                                <strong>Herramientas:</strong> SimilarWeb para ver fuentes de tráfico, Facebook Ad Library para ver anuncios activos, Google Keyword Planner para palabras clave
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">5. Puntos Fuertes y Débiles</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Síntesis estratégica:</strong></p>
+                            <p>Después de analizar todos los aspectos anteriores, identificar:</p>
+                            <ul>
+                                <li><strong>Puntos Fuertes del competidor:</strong> ¿Qué hacen excepcionalmente bien? ¿Qué podríamos aprender o adaptar?</li>
+                                <li><strong>Puntos Débiles del competidor:</strong> ¿Dónde fallan? ¿Qué oportunidad nos da esto para diferenciarnos?</li>
+                            </ul>
+                            <p><strong>Ejemplo de conclusión:</strong></p>
+                            <div class="code-block">
+                                <span class="code-line">COMPETIDOR: MarcaX.com</span><br>
+                                <span class="code-line">Puntos Fuertes: Excelente UX mobile, checkout en 2 pasos, envío gratis</span><br>
+                                <span class="code-line">Puntos Débiles: Poca presencia en redes, sin contenido SEO, sin reviews de clientes</span><br>
+                                <span class="code-line">OPORTUNIDAD: Podemos diferenciarnos con estrategia de contenido y social proof</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-box" style="margin-top: 3rem;">
+                <h3 class="cta-title">📊 Recomendación</h3>
+                <p class="cta-text">Analicen mínimo 3 competidores directos. Creen una tabla comparativa con todos los criterios. Esto les dará claridad sobre el estándar del mercado y dónde pueden diferenciarse.</p>
+            </div>
+        </section>
+
+        <!-- Sección 4: Dimensión del Mercado -->
+        <section id="mercado" class="section">
+            <h2 class="section-title">04. Dimensión del Mercado</h2>
+            <p class="section-subtitle">TAM, SAM, SOM y horizonte temporal</p>
+
+            <div class="highlight-box">
+                <strong>¿Por qué dimensionar el mercado?</strong> Para validar si existe demanda suficiente que justifique la inversión en el proyecto de e-commerce. Es la base para proyecciones financieras realistas.
+            </div>
+
+            <h3 style="font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--accent); margin: 3rem 0 1.5rem;">El Modelo TAM - SAM - SOM</h3>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-number">01</span>
+                        <h3 class="timeline-title">TAM - Total Addressable Market</h3>
+                        <p><strong>Definición:</strong> El mercado total teórico sin restricciones. Todo el universo de demanda posible.</p>
+                        <p><strong>Pregunta:</strong> ¿Cuánto vale TODO el mercado de mi categoría?</p>
+                        <p><strong>Ejemplo:</strong> Si vendes zapatillas deportivas, el TAM sería el mercado total de zapatillas en Argentina.</p>
+                        <div class="code-block">
+                            <span class="code-line">CÁLCULO TAM:</span><br>
+                            <span class="code-line">Población objetivo × Consumo promedio anual × Precio promedio</span><br>
+                            <span class="code-line">Ejemplo: 15M personas × 2 pares/año × $30,000 = $900.000M/año</span>
+                        </div>
+                        <p><strong>Fuentes de datos:</strong> INDEC, Cámara Argentina de Comercio Electrónico (CACE), estudios de mercado sectoriales, estadísticas gubernamentales.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-number">02</span>
+                        <h3 class="timeline-title">SAM - Serviceable Available Market</h3>
+                        <p><strong>Definición:</strong> La porción del TAM que tu modelo de negocio puede alcanzar realistamente.</p>
+                        <p><strong>Pregunta:</strong> ¿Cuánto del mercado total puedo servir con mi propuesta?</p>
+                        <p><strong>Filtros aplicados:</strong> Geografía (¿solo CABA?), segmento (¿solo running?), canal (¿solo online?), capacidad operativa.</p>
+                        <div class="code-block">
+                            <span class="code-line">CÁLCULO SAM:</span><br>
+                            <span class="code-line">TAM × % que puede alcanzar con su modelo</span><br>
+                            <span class="code-line">Ejemplo: $900.000M × 15% (running, online, CABA) = $135.000M/año</span>
+                        </div>
+                        <p><strong>Consideraciones:</strong> Alcance logístico, presupuesto de marketing, capacidad de inventario, restricciones de la categoría.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-number">03</span>
+                        <h3 class="timeline-title">SOM - Serviceable Obtainable Market</h3>
+                        <p><strong>Definición:</strong> La porción del SAM que realistamente puedes capturar en el horizonte de planificación (1-3 años).</p>
+                        <p><strong>Pregunta:</strong> ¿Cuánto voy a facturar realmente?</p>
+                        <p><strong>Factores:</strong> Competencia, presupuesto de marketing, madurez de marca, recursos del equipo, capacidad operativa real.</p>
+                        <div class="code-block">
+                            <span class="code-line">CÁLCULO SOM:</span><br>
+                            <span class="code-line">SAM × Market share realista (1-5% en año 1 es común)</span><br>
+                            <span class="code-line">Ejemplo: $135.000M × 2% = $2.700M/año (año 1)</span><br>
+                            <span class="code-line">Con crecimiento: Año 2: $5.400M | Año 3: $10.800M</span>
+                        </div>
+                        <p><strong>Validación:</strong> Comparar con competidores similares, consultar con expertos del sector, analizar capacidad operativa.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 3rem;">
+                <strong>⚠️ Error Común:</strong> Ser demasiado optimista con el SOM. Es mejor subestimar y superar expectativas que prometer números irreales. Un SOM del 1-3% del SAM en el primer año es razonable para un e-commerce nuevo.
+            </div>
+
+            <h3 style="font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--accent); margin: 3rem 0 1.5rem;">Horizonte Temporal del Proyecto</h3>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">0-3M</div>
+                    <div class="stat-label">Implementación & MVP<br>Go-live inicial</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3-12M</div>
+                    <div class="stat-label">Optimización & Crecimiento<br>Primeras ventas consistentes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12-36M</div>
+                    <div class="stat-label">Escalamiento & Madurez<br>Operación estable y rentable</div>
+                </div>
+            </div>
+
+            <p style="margin-top: 2rem; font-size: 1.1rem;">
+                <strong>Proyección recomendada:</strong> Para el Entregable 1, proyecten a 3 años con metas trimestrales o semestrales. Esto les permite ajustar estrategia sin comprometer la visión a largo plazo.
+            </p>
+        </section>
+
+        <!-- Sección 5: Estimaciones Económicas -->
+        <section id="economia" class="section">
+            <h2 class="section-title">05. Estimaciones Económicas</h2>
+            <p class="section-subtitle">Presupuesto, costos, ingresos y ROI</p>
+
+            <div class="highlight-box">
+                <strong>Importancia:</strong> Las estimaciones económicas son el pilar que determina la viabilidad del proyecto. Deben ser realistas, basadas en datos y considerar tanto la inversión inicial como los costos recurrentes.
+            </div>
+
+            <h3 style="font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--accent); margin: 3rem 0 1.5rem;">Estructura de Costos Recomendada</h3>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="card-icon">💻</span>
+                    <h3 class="card-title">Desarrollo Plataforma (40%)</h3>
+                    <div class="card-content">
+                        <p><strong>Incluye:</strong></p>
+                        <ul>
+                            <li>Estudio de mercado y planificación (80-160 hrs)</li>
+                            <li>Diseño UX/UI (40-120 hrs)</li>
+                            <li>Desarrollo e implementación (100-400 hrs)</li>
+                            <li>Integraciones (pagos, logística, analytics)</li>
+                            <li>Testing y QA</li>
+                        </ul>
+                        <p><strong>Rango estimado:</strong> $500K - $2M (dependiendo de complejidad)</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">📢</span>
+                    <h3 class="card-title">Marketing (40%)</h3>
+                    <div class="card-content">
+                        <p><strong>Incluye:</strong></p>
+                        <ul>
+                            <li>Pauta publicitaria (Google Ads, Meta Ads)</li>
+                            <li>SEO y contenido</li>
+                            <li>Social Media Management</li>
+                            <li>Email Marketing</li>
+                            <li>Influencers / Afiliados</li>
+                        </ul>
+                        <p><strong>Rango estimado:</strong> $500K - $2M anual (recurrente)</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🔧</span>
+                    <h3 class="card-title">Mantenimiento (20%)</h3>
+                    <div class="card-content">
+                        <p><strong>Incluye:</strong></p>
+                        <ul>
+                            <li>Hosting y servidores</li>
+                            <li>Licencias de software</li>
+                            <li>Soporte técnico</li>
+                            <li>Actualizaciones y mejoras</li>
+                            <li>Seguridad y backups</li>
+                        </ul>
+                        <p><strong>Rango estimado:</strong> $250K - $1M anual (recurrente)</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--accent); margin: 3rem 0 1.5rem;">Cálculo de Indicadores Clave</h3>
+
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">1. Ingresos Proyectados</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Fórmula base:</strong></p>
+                            <div class="code-block">
+                                <span class="code-line">INGRESOS = Tráfico × Tasa de Conversión × Ticket Promedio</span><br>
+                                <span class="code-line"></span><br>
+                                <span class="code-line">Ejemplo Año 1:</span><br>
+                                <span class="code-line">• Tráfico mensual: 10,000 visitantes</span><br>
+                                <span class="code-line">• Conversión: 2% = 200 ventas/mes</span><br>
+                                <span class="code-line">• Ticket promedio: $15,000</span><br>
+                                <span class="code-line">• Ingresos mensuales: 200 × $15,000 = $3,000,000</span><br>
+                                <span class="code-line">• Ingresos anuales: $36,000,000</span>
+                            </div>
+                            <p><strong>Consideraciones:</strong></p>
+                            <ul>
+                                <li>Estacionalidad (algunos meses venden más)</li>
+                                <li>Crecimiento gradual (meses iniciales más bajos)</li>
+                                <li>Tasa de retorno de clientes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">2. Costos Totales</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Componentes del costo:</strong></p>
+                            <div class="code-block">
+                                <span class="code-line">COSTOS FIJOS:</span><br>
+                                <span class="code-line">• Desarrollo inicial: $1,200,000 (one-time)</span><br>
+                                <span class="code-line">• Hosting/Plataforma: $50,000/mes</span><br>
+                                <span class="code-line">• Equipo base: $300,000/mes</span><br>
+                                <span class="code-line"></span><br>
+                                <span class="code-line">COSTOS VARIABLES (por venta):</span><br>
+                                <span class="code-line">• Costo del producto: 40-60% del precio de venta</span><br>
+                                <span class="code-line">• Comisión pasarela de pago: 3-5%</span><br>
+                                <span class="code-line">• Envío (si no lo cobra el cliente): $500-$2,000</span><br>
+                                <span class="code-line">• Marketing/CAC: $1,000-$5,000 por cliente</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">3. Margen Bruto y Neto</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <div class="code-block">
+                                <span class="code-line">MARGEN BRUTO = (Ingresos - Costo de Ventas) / Ingresos × 100</span><br>
+                                <span class="code-line"></span><br>
+                                <span class="code-line">Ejemplo:</span><br>
+                                <span class="code-line">• Ingresos anuales: $36,000,000</span><br>
+                                <span class="code-line">• Costo de ventas (productos): $18,000,000 (50%)</span><br>
+                                <span class="code-line">• Margen Bruto: $18,000,000 (50%)</span><br>
+                                <span class="code-line"></span><br>
+                                <span class="code-line">MARGEN NETO = (Ingresos - Costos Totales) / Ingresos × 100</span><br>
+                                <span class="code-line"></span><br>
+                                <span class="code-line">• Ingresos: $36,000,000</span><br>
+                                <span class="code-line">• Costos totales: $30,000,000</span><br>
+                                <span class="code-line">• Margen Neto: $6,000,000 (16.7%)</span>
+                            </div>
+                            <p><strong>Benchmarks saludables:</strong></p>
+                            <ul>
+                                <li>Margen Bruto: 40-60%</li>
+                                <li>Margen Neto: 10-25% (año 1), 15-30% (madurez)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">4. Punto de Equilibrio</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Definición:</strong> El nivel de ventas necesario para cubrir todos los costos (sin ganancia ni pérdida).</p>
+                            <div class="code-block">
+                                <span class="code-line">PUNTO DE EQUILIBRIO = Costos Fijos / (Precio - Costo Variable Unitario)</span><br>
+                                <span class="code-line"></span><br>
+                                <span class="code-line">Ejemplo:</span><br>
+                                <span class="code-line">• Costos fijos mensuales: $4,200,000</span><br>
+                                <span class="code-line">• Precio promedio: $15,000</span><br>
+                                <span class="code-line">• Costo variable unitario: $9,000</span><br>
+                                <span class="code-line">• Margen de contribución: $6,000</span><br>
+                                <span class="code-line">• Punto de equilibrio: 4,200,000 / 6,000 = 700 ventas/mes</span>
+                            </div>
+                            <p><strong>Interpretación:</strong> Necesitan vender 700 unidades mensuales (o $10,500,000) para no perder dinero.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="accordion-title">5. ROI (Retorno sobre Inversión)</span>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p><strong>Definición:</strong> Mide la rentabilidad del proyecto en relación a la inversión inicial.</p>
+                            <div class="code-block">
+                                <span class="code-line">ROI = (Ganancia - Inversión) / Inversión × 100</span><br>
+                                <span class="code-line"></span><br>
+                                <span class="code-line">Ejemplo (proyección a 2 años):</span><br>
+                                <span class="code-line">• Inversión inicial: $3,000,000</span><br>
+                                <span class="code-line">• Ganancia acumulada (2 años): $9,000,000</span><br>
+                                <span class="code-line">• ROI = (9,000,000 - 3,000,000) / 3,000,000 × 100 = 200%</span><br>
+                                <span class="code-line">• Interpretación: Por cada $1 invertido, ganaron $2</span>
+                            </div>
+                            <div class="highlight-box" style="margin-top: 1.5rem;">
+                                <strong>Benchmark e-commerce:</strong> ROI positivo a partir de 18-24 meses es el estándar. Un ROI del 100-300% a 3 años es saludable.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-box" style="margin-top: 3rem;">
+                <h3 class="cta-title">💡 Recomendación Final</h3>
+                <p class="cta-text">Creen tres escenarios: Pesimista, Realista y Optimista. Usen el escenario Realista para sus proyecciones oficiales. Sean conservadores en ingresos y generosos en costos - es mejor sorprender positivamente que decepcionar.</p>
+            </div>
+        </section>
+
+        <!-- Sección 6: Recursos Adicionales -->
+        <section id="recursos" class="section">
+            <h2 class="section-title">06. Recursos & Herramientas</h2>
+            <p class="section-subtitle">Checklist final y materiales complementarios</p>
+
+            <h3 style="font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--accent); margin: 3rem 0 1.5rem;">Checklist de Entregable 1</h3>
+
+            <div class="checklist">
+                <div class="checklist-item">
+                    <div class="checklist-checkbox"></div>
+                    <div class="checklist-text"><strong>Perfil de Agencia:</strong> Nombre, misión, visión y roles del equipo claramente definidos</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-checkbox"></div>
+                    <div class="checklist-text"><strong>Descripción del Cliente:</strong> Contexto del negocio, industria, productos/servicios</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-checkbox"></div>
+                    <div class="checklist-text"><strong>Análisis FODA:</strong> Mínimo 3-4 puntos por cuadrante, relevantes y específicos</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-checkbox"></div>
+                    <div class="checklist-text"><strong>Benchmark:</strong> Análisis de 3 competidores con todos los criterios solicitados</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-checkbox"></div>
+                    <div class="checklist-text"><strong>TAM/SAM/SOM:</strong> Cálculos fundamentados con fuentes de datos citadas</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-checkbox"></div>
+                    <div class="checklist-text"><strong>Horizonte Temporal:</strong> Proyección clara a 1-3 años</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-checkbox"></div>
+                    <div class="checklist-text"><strong>Estimaciones Económicas:</strong> Presupuesto, ingresos, costos, márgenes, punto de equilibrio y ROI</div>
+                </div>
+                <div class="checklist-item">
+                    <div class="checklist-checkbox"></div>
+                    <div class="checklist-text"><strong>Referencias Bibliográficas:</strong> Formato APA 7, fuentes verificables</div>
+                </div>
+            </div>
+
+            <h3 style="font-family: 'Bebas Neue', cursive; font-size: 2rem; color: var(--accent); margin: 3rem 0 1.5rem;">Herramientas Recomendadas</h3>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="card-icon">📊</span>
+                    <h3 class="card-title">Investigación & Análisis</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>SimilarWeb:</strong> Tráfico y fuentes de competidores</li>
+                            <li><strong>BuiltWith:</strong> Tecnología usada por sitios</li>
+                            <li><strong>Google Trends:</strong> Tendencias de búsqueda</li>
+                            <li><strong>CACE:</strong> Estadísticas e-commerce Argentina</li>
+                            <li><strong>INDEC:</strong> Datos demográficos y económicos</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">🎨</span>
+                    <h3 class="card-title">Diseño & Presentación</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Canva:</strong> Infografías y presentaciones</li>
+                            <li><strong>Figma:</strong> Wireframes y prototipos</li>
+                            <li><strong>Google Slides:</strong> Presentaciones colaborativas</li>
+                            <li><strong>Miro:</strong> Brainstorming y mapas mentales</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-icon">📈</span>
+                    <h3 class="card-title">Gestión & Planificación</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Trello/Asana:</strong> Gestión de tareas del equipo</li>
+                            <li><strong>Google Sheets:</strong> Cálculos económicos</li>
+                            <li><strong>Notion:</strong> Documentación centralizada</li>
+                            <li><strong>GanttProject:</strong> Cronogramas visuales</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-box" style="margin-top: 3rem;">
+                <h3 class="cta-title">🎯 Próximos Pasos</h3>
+                <p class="cta-text">
+                    1. Completen la plantilla usando esta guía como referencia<br>
+                    2. Revisen cada sección con el checklist<br>
+                    3. Validen números con fuentes confiables<br>
+                    4. Soliciten feedback a su tutor antes de la entrega final
+                </p>
+                <a href="#agencia" class="btn" style="margin-top: 1.5rem;">Volver al Inicio</a>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">
+            Guía Interactiva de Gestión de Proyectos E-commerce © 2026<br>
+            Tecnicatura Universitaria en Comercio Electrónico y Marketing Digital<br>
+            Desarrollado con datos de documentos obligatorios de la asignatura
+        </p>
+    </footer>
+
+    <script>
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Accordion
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const wasActive = item.classList.contains('active');
+                
+                // Close all items
+                document.querySelectorAll('.accordion-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Checklist
+        document.querySelectorAll('.checklist-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('checked');
+            });
+        });
+
+        // Tabs
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Animate sections on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Add animation delays to cards
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>
